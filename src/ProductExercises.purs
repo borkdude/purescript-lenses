@@ -49,3 +49,5 @@ _bothObject = _2 <<< _object
 
 -- exercise3 :: Tuple String String
 exercise3 = over _2 (view _object) both
+-- or simply
+exercise3 = over _2 _.object both
