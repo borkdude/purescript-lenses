@@ -2,15 +2,18 @@ module ProductExercises where
 
 import Product (both, Event)
 
-import Prelude
+import Data.Lens (lens, set, view, over, _1, _2, Lens, Lens')
+import Data.Lens.At
+import Data.Maybe
+import Data.Profunctor.Strong
 import Data.Tuple (Tuple(..), fst, snd)
 import Data.Tuple.Nested (T2, T3, T4, get1, get2, get3, over3, tuple4)
-import Data.Lens (lens, set, view, over, _1, _2, Lens, Lens')
+import Prelude
 
 {- Paste the following into the repl
 
 import Product
-import Data.Tuple.Nested 
+import Data.Tuple.Nested
 import Data.Lens
 import Data.Lens as Lens
  
@@ -100,3 +103,58 @@ _elt3 =
     setter = set3
 
 -- over _elt3 ((*)60000) fourLong -- works
+
+-- 1.8 law exercise
+invalidSetGet :: forall a b ignored.
+                 Lens { foo :: a, bar :: a | ignored }
+                      { foo :: b, bar :: a | ignored }
+                 a b
+
+-- returns field bar but sets field foo
+invalidSetGet = lens getter setter where
+  getter = _.bar
+  setter whole new = whole { foo = new }
+
+testInvalidSetGet = let
+  input = 10
+  put = set invalidSetGet 10 {foo : 2, bar : 3}
+  get = view invalidSetGet put
+  in input /= get
+
+invalidGetSet = invalidSetGet
+
+testInvalidGetSet = let
+  r = {foo : 2, bar : 3}
+  got = view invalidSetGet r 
+  put = set invalidSetGet got r
+  in r /= put
+
+invalidSetSet = lens getter setter where
+  getter = _.foo
+  setter whole new = whole { counter = whole.counter + 1
+                           , foo = new + whole.counter }
+
+testInvalidSetSet = let
+  r = { foo : 0, counter : 0}
+  r1 = set invalidSetSet 0 r
+  r2 = set invalidSetSet 0 r1
+  r3 = set invalidSetSet 0 r2
+  in r /= r1 && r1 /= r2 && r2 /= r3
+
+type AtType =
+  forall t13 t14 t19 t5 t8.
+  Strong t8 => At t14 Int t19 =>
+  t8 (Maybe t19) (Maybe t19) ->
+  t8 (Tuple (Tuple t13 t14) t5) (Tuple (Tuple t13 t14) t5)
+
+type AtTypeSimplified =
+  forall _1_ _2_ atAble something.
+  At atAble Int something =>
+  Lens' (Tuple (Tuple _1_  atAble) _2_) (Maybe something)
+
+l1 :: AtType
+l1 = _1 <<< _2 <<< at 3
+
+-- verify the types are equivalent
+l2 :: AtTypeSimplified
+l2 = l1
