@@ -1,0 +1,26 @@
+p v
+“Though line” (or “throughline”) -> "Through line"
+
+p 11
+over elt3 ((*)60000) fourLong -> over _elt3 ((*)60000)
+
+p 17
+Line 3’s tells use we have a Lens -> Line 3 tells us
+
+p 38
+Then use view to convert [[1], [2, 3]] to Additive 10. -> Additive 6
+
+p43
+-- Convert the following so that it makes no explicit reference to `Map`
+-- _at3_trav_1' :: forall a _1_ . 
+--                Traversal' (Map Int (Tuple a _1_)) a
+_at3_trav_1' :: forall a _1_ keyed. At keyed Int (Tuple a _1_) => 
+               Traversal' keyed a
+_at3_trav_1' = at 3 <<< traversed <<< _1
+
+Traversal.purs still mentions the Map:
+
+_at3_trav_1' :: forall a _1_ keyed .
+                At keyed Int a => 
+                  Traversal' (Map Int (Tuple a _1_)) a
+

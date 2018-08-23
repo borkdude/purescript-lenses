@@ -62,22 +62,14 @@ _1_trav = _1 <<< traversed
 
 -- forall t11 t5 t7 t8. Traversable t7 => Wander t8 => At t5 Int t11 => t8 (Maybe t11) (Maybe t11) -> t8 (t7 t5) (t7 t5)
 
-_trav_at3 :: forall a b trav1 m.
-             Traversable trav1 => At m Int a =>
-             Traversal (trav1 (m Int (Maybe a))) (trav1 (m Int (Maybe b))) (Maybe a) (Maybe b)
+_trav_at3 :: forall a trav keyed.
+             Traversable trav => At keyed Int a =>
+             Traversal' (trav keyed) (Maybe a)
 _trav_at3 = traversed <<< at 3
--- TODO: fix this shit
-
-{-
-
-
 
 -- Convert the following so that it makes no explicit reference to `Map`
-
-_at3_trav_1' :: forall a _1_ . 
-               Traversal' (Map Int (Tuple a _1_)) a
+-- _at3_trav_1' :: forall a _1_ . 
+--                Traversal' (Map Int (Tuple a _1_)) a
+_at3_trav_1' :: forall a _1_ keyed. At keyed Int (Tuple a _1_) => 
+               Traversal' keyed a
 _at3_trav_1' = at 3 <<< traversed <<< _1
-
--}
-
-
