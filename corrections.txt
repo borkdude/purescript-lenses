@@ -14,13 +14,18 @@ p43
 -- Convert the following so that it makes no explicit reference to `Map`
 -- _at3_trav_1' :: forall a _1_ . 
 --                Traversal' (Map Int (Tuple a _1_)) a
-_at3_trav_1' :: forall a _1_ keyed. At keyed Int (Tuple a _1_) => 
-               Traversal' keyed a
-_at3_trav_1' = at 3 <<< traversed <<< _1
 
 Traversal.purs still mentions the Map:
 
 _at3_trav_1' :: forall a _1_ keyed .
                 At keyed Int a => 
                   Traversal' (Map Int (Tuple a _1_)) a
+
+Should it be something like:
+
+_at3_trav_1' :: forall a _1_ keyed. At keyed Int (Tuple a _1_) => 
+                Traversal' keyed a
+_at3_trav_1' = at 3 <<< traversed <<< _1
+
+?
 
