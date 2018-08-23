@@ -3,8 +3,8 @@ module Critter4Us.Animal
   , Id
   , Tags
   , named
-  , addTag
-  , clearTags
+  -- , addTag
+  -- , clearTags
   )
   where
 
@@ -18,23 +18,22 @@ type Tags = Array String
 type Animal =
   { id :: Id
   , name :: String
-  , tags :: Tags
   }
 
 named :: String -> Id -> Animal
 named name id =
-  { id, name, tags : [] }
+  { id, name }
 
-clearTags :: Animal -> Animal
-clearTags = set _tags []
+-- clearTags :: Animal -> Animal
+-- clearTags = set _tags []
 
 -- Note: let's make it the UI's job to disallow duplicate tags.
-addTag :: String -> Animal -> Animal
-addTag tag = 
-  over _tags (flip snoc tag)
+-- addTag :: String -> Animal -> Animal
+-- addTag tag = 
+--   over _tags (flip snoc tag)
 
 
 {- Internal -}
 
-_tags :: Lens' Animal Tags
-_tags = lens _.tags $ _ { tags = _ }
+-- _tags :: Lens' Animal Tags
+-- _tags = lens _.tags $ _ { tags = _ }
