@@ -2,6 +2,7 @@ module TraversalStart where
 
 import Prelude
 import Data.Tuple (Tuple)
+import Data.Tuple.Nested
 import Data.Maybe (Maybe)
 import Data.Lens (Traversal', Traversal, _1, traversed)
 import Data.Traversable (class Traversable)
@@ -50,7 +51,6 @@ import Data.Profunctor.Strong
 _trav_trav :: forall a b trav1 trav2.
               Traversable trav1 => Traversable trav2 =>
               Traversal (trav1 (trav2 a)) (trav1 (trav2 b)) a b
-
 _trav_trav = traversed <<< traversed
 
 _1_trav ::
@@ -59,11 +59,18 @@ _1_trav ::
   Traversal (Tuple (traversable a) _2_) (Tuple (traversable b) _2_) a b
 _1_trav = _1 <<< traversed
 
+
+-- forall t11 t5 t7 t8. Traversable t7 => Wander t8 => At t5 Int t11 => t8 (Maybe t11) (Maybe t11) -> t8 (t7 t5) (t7 t5)
+
+_trav_at3 :: forall a b trav1 m.
+             Traversable trav1 => At m Int a =>
+             Traversal (trav1 (m Int (Maybe a))) (trav1 (m Int (Maybe b))) (Maybe a) (Maybe b)
+_trav_at3 = traversed <<< at 3
+-- TODO: fix this shit
+
 {-
 
 
-_trav_at3 :: 
-_trav_at3 = traversed <<< at 3
 
 -- Convert the following so that it makes no explicit reference to `Map`
 
