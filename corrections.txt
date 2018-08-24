@@ -10,7 +10,7 @@ Line 3’s tells use we have a Lens -> Line 3 tells us
 p 38
 Then use view to convert [[1], [2, 3]] to Additive 10. -> Additive 6
 
-p43
+p 43
 -- Convert the following so that it makes no explicit reference to `Map`
 -- _at3_trav_1' :: forall a _1_ . 
 --                Traversal' (Map Int (Tuple a _1_)) a
@@ -29,3 +29,5 @@ _at3_trav_1' = at 3 <<< traversed <<< _1
 
 ?
 
+p 62
+Using _intSource as a template, produce int. -> produce _int.
