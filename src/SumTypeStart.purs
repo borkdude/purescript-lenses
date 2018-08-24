@@ -1,16 +1,13 @@
 module SumTypeStart where
 
-import Prelude
-import Data.Lens (Prism, Prism', prism', prism, review, preview, Traversal, _Right, traversed)
-import Data.Traversable (class Traversable)
-
-import Data.Maybe
-import Data.Either
-import Data.Int (fromString)
-
 import Color (Color)
 import Color as Color
-
+import Data.Either
+import Data.Int (fromString)
+import Data.Lens (Prism, Prism', prism', prism, review, preview, Traversal, _Right, traversed, only)
+import Data.Maybe
+import Data.Traversable (class Traversable)
+import Prelude
 import SumType
 
 {-   If you want to try out examples, paste the following into the repl.
@@ -98,3 +95,14 @@ testReviewPreviewInt = (123 # review _int # preview _int) == (Just 123)
 testPreviewReviewInt = ("123" # preview _int <#> review _int) == (Just "123")
 
 -- Yes.
+
+_word w = prism' constructor focuser where
+  constructor = identity
+  focuser s = if s == w
+              then (Just s)
+              else Nothing
+  
+_dawn = _word "Dawn"
+
+testReviewPreviewDawn = ("Dawn" # review _dawn # preview _dawn) == (Just "Dawn")
+testPreviewReviewDawn = ("Dawn" # preview _dawn <#> review _dawn) == (Just "Dawn")
